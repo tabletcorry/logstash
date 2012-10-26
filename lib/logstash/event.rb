@@ -106,12 +106,10 @@ class LogStash::Event
   # field-related access
   public
   def [](key)
-    # If the key isn't in fields and it starts with an "@" sign, get it out of data instead of fields
-    if ! @data["@fields"].has_key?(key) and key.slice(0,1) == "@"
-      return @data[key]
-    # Exists in @fields (returns value) or doesn't start with "@" (return null)
+    if key.start_with?("@")
+        return @data[key]
     else
-      return @data["@fields"][key]
+        return @data["@fields"][key]
     end
   end # def []
   
@@ -145,7 +143,7 @@ class LogStash::Event
   def append(event)
     if event.message
       if self.message
-        self.message += "\n" + event.message 
+        self.message << "\n" << event.message 
       else
         self.message = event.message
       end
