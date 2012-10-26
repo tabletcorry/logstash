@@ -72,8 +72,8 @@ class LogStash::FilterWorker < LogStash::Plugin
         end
       end # @filters.each
 
-      @logger.debug("Event finished filtering", :event => event,
-                    :thread => Thread.current[:name])
+      #@logger.debug("Event finished filtering", :event => event,
+      #              :thread => Thread.current[:name])
       @output_queue.push(event) unless event.cancelled?
     end # events.each
   end # def filter

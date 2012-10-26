@@ -740,7 +740,7 @@ class LogStash::Agent
 
     begin
       while event = queue.pop do
-        @logger.debug("Sending event", :target => output)
+        #@logger.debug("Sending event", :target => output)
         output.handle(event)
         break if output.finished?
       end

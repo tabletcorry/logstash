@@ -158,7 +158,7 @@ class LogStash::Filters::Grok < LogStash::Filters::Base
     # parse it with grok
     matched = false
 
-    @logger.debug("Running grok filter", :event => event);
+#    @logger.debug("Running grok filter", :event => event);
     done = false
     @patterns.each do |field, pile|
       break if done
@@ -168,7 +168,7 @@ class LogStash::Filters::Grok < LogStash::Filters::Base
         next
       end
 
-      @logger.debug("Trying pattern", :pile => pile, :field => field )
+#      @logger.debug("Trying pattern", :pile => pile, :field => field )
       (event[field].is_a?(Array) ? event[field] : [event[field]]).each do |fieldvalue|
         begin
           grok, match = pile.match(fieldvalue)
@@ -206,16 +206,16 @@ class LogStash::Filters::Grok < LogStash::Filters::Base
               value = value.to_f
           end
 
-          # Special casing to skip captures that represent the entire log message.
-          if fieldvalue == value and field == "@message"
-            # Skip patterns that match the entire message
-            @logger.debug("Skipping capture since it matches the whole line.", :field => key)
+          if @named_captures_only && !is_named
+#            @logger.debug("Skipping capture since it is not a named " \
+#                          "capture and named_captures_only is true.", :field => key)
             next
           end
 
-          if @named_captures_only && !is_named
-            @logger.debug("Skipping capture since it is not a named " \
-                          "capture and named_captures_only is true.", :field => key)
+          # Special casing to skip captures that represent the entire log message.
+          if fieldvalue == value and field == "@message"
+            # Skip patterns that match the entire message
+#            @logger.debug("Skipping capture since it matches the whole line.", :field => key)
             next
           end
 
@@ -251,7 +251,7 @@ class LogStash::Filters::Grok < LogStash::Filters::Base
       event.tags << "_grokparsefailure"
     end
 
-    @logger.debug("Event now: ", :event => event)
+#    @logger.debug("Event now: ", :event => event)
   end # def filter
 
   private
